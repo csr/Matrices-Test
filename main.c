@@ -105,7 +105,6 @@ void mediaNumeriPariPerRigaEColonna(int matrice[][2], int numeroColonne, int num
                 numeriPari++;
             }
         }
-        
         mediaColonne[k] = mediaColonne[k] / numeriPari;
         numeriPari = 0;
     }
