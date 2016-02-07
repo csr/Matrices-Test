@@ -35,25 +35,40 @@ void inserimentoDaTastieraElementiMatrice(int matrice[][2], int numeroColonne, i
     }
 }
 
-void massimo(int matrice[][2], int numeroColonne, int numeroRighe) {
-    int a, z;
+void sommaMassimiRigheMatrici(int matrice[][2], int numeroColonne, int numeroRighe) {
+    int i, k;
+    int massimiRiga[numeroRighe];
+    int mediaRighe[numeroRighe];
+    int numeriDispari[numeroRighe];
     
-    int massimoRiga = matrice[0][0];
-    int massimoColonna = matrice[0][0];
-    int numeriDispari = 0;
+    for (k = 0; k < numeroRighe; k++) {
+        mediaRighe[k] = 0;
+        numeriDispari[k] = 0;
+        massimiRiga[k] = matrice[k][0];
+    }
     
-    for(k = 0; k < numeroColonne; ++k) {
-        for(i = 0; i < numeroRighe; i++){
-            if (matrice[k][i] > massimoRiga) {
-                massimoRiga = matrice[k][i];
+    for(k = 0; k < numeroRighe; k++) {
+        for(i = 0; i < numeroColonne; i++) {
+            if (matrice[k][i] > massimiRiga[k]) {
+                massimiRiga[k] = matrice[k][i];
             }
-            
-            if(!(matrice[i][k] % 2)) {
-                numeriDispari++;
+            if (matrice[k][i] % 2) {
+                mediaRighe[k] += matrice[k][i];
+                numeriDispari[k]++;
+                printf("Ho aggiunto %d alla somma totale della riga %d. Numeri dispari: %d Somma totale: %d\n", matrice[k][i], k, numeriDispari[k], mediaRighe[k]);
             }
         }
-        int media =
-        numeriDispari = 0;
+    }
+    
+    for (k = 0; k < numeroRighe; k++) {
+        mediaRighe[k] = mediaRighe[k] / numeriDispari[k];
+        if (mediaRighe[k] > massimiRiga[k]) {
+            printf("La media (%d) e' piu' grande del numero massimo della riga (%d).\n", mediaRighe[k], massimiRiga[k]);
+        } else if (mediaRighe[k] == massimiRiga[k]) {
+            printf("La media (%d) e' uguale al numero massimo della riga (%d).\n", mediaRighe[k], massimiRiga[k]);
+        } else {
+            printf("La media (%d) e' piu' piccola del numero massimo della riga (%d).\n", mediaRighe[k], massimiRiga[k]);
+        }
     }
 }
 
@@ -62,40 +77,44 @@ void mediaNumeriPariPerRigaEColonna(int matrice[][2], int numeroColonne, int num
     int mediaRighe[numeroRighe];
     int i, k, numeriPari = 0;
     
-    for(i = 0; i < numeroRighe; i++) {
+    for (i = 0; i < numeroRighe; i++) {
         mediaRighe[i] = 0;
     }
-    for(k = 0; k < numeroColonne; k++) {
+    for (k = 0; k < numeroColonne; k++) {
         mediaColonne[k] = 0;
     }
     
-    for(i = 0; i < numeroRighe; i++){
-        for(k=0; k < numeroColonne; ++k){
+    for (i = 0; i < numeroRighe; i++) {
+        for(k = 0; k < numeroColonne; k++){
             if(!(matrice[i][k] % 2)) {
                 mediaRighe[i] += matrice[i][k];
                 numeriPari++;
             }
         }
-        mediaRighe[i] = mediaRighe[i] / numeriPari;
-        numeriPari = 0;
+        
+        if (numeriPari > 0) {
+            mediaRighe[i] = mediaRighe[i] / numeriPari;
+            numeriPari = 0;
+        }
     }
     
-    for(k = 0; k < numeroColonne; ++k) {
+    for (k = 0; k < numeroColonne; k++) {
         for(i = 0; i < numeroRighe; i++){
             if(!(matrice[i][k] % 2)) {
                 mediaColonne[k] += matrice[i][k];
                 numeriPari++;
             }
         }
+        
         mediaColonne[k] = mediaColonne[k] / numeriPari;
         numeriPari = 0;
     }
     
-    for(i = 0; i < numeroRighe; i++) {
+    for (i = 0; i < numeroRighe; i++) {
         printf("La media dei numeri pari della riga %d e': %d\n", i+1, mediaRighe[i]);
     }
     
-    for(k = 0; k < numeroColonne; ++k) {
+    for (k = 0; k < numeroColonne; ++k) {
         printf("La media dei numeri pari della colonna %d e': %d\n", k+1, mediaColonne[k]);
     }
 }
@@ -106,10 +125,12 @@ int main() {
     int matrice[numeroRighe][numeroColonne];
     
     while (1) {
+        puts("---------------------------------------------------");
         puts("1: Inserimento elementi della matrice da tastiera");
         puts("2: Visualizzazione elementi matrice");
         puts("3: Media dei numeri dispari per riga e per colonna");
-        puts("4: Massimi");
+        puts("4: Somma massimi di ogni riga e confronto con media");
+        puts("---------------------------------------------------");
         printf("Inserisci un'opzione del menu: ");
         int scelta = acquisisciNumeroCompresoTraValori(1, 4);
         
@@ -124,7 +145,7 @@ int main() {
                 mediaNumeriPariPerRigaEColonna(matrice, numeroColonne, numeroRighe);
                 break;
             case 4:
-                massimo(matrice, numeroColonne, numeroRighe);
+                sommaMassimiRigheMatrici(matrice, numeroColonne, numeroRighe);
                 break;
             default:
                 break;
